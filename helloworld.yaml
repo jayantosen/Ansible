@@ -1,0 +1,41 @@
+---
+# 1. HEADER SECTION
+- name: This is simple hello world program
+  hosts: webserver
+  vars:
+    mysoftware: wget
+    tools: [ 'git','unzip' ]
+
+# 2. TASK SECTION
+  tasks:
+  - name: To create a file in remore server
+    copy:
+      dest: /opt/first.txt
+      mode: 0755
+      group: centos
+      owner: centos
+      content: |
+               Hello from ansible server
+               This is simple content
+
+  - name: To delete the file
+    file:
+      path: /opt/hello.txt
+      state: absent
+
+  - name: To install the wget
+    yum:
+      name: "{{ mysoftware }}"
+      state: installed
+
+  - name: To install java
+    yum:
+      name:
+        - java-1.7.0-openjdk-devel
+      state: installed
+
+  - name: To install
+    yum:
+      name: "{{ item }}"
+      state: installed
+    with_items: "{{ tools }}"
